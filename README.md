@@ -1,6 +1,13 @@
+This repo contains 3 tasks as per the assignment:
+Part A- Contains Test plan and Manual Execution
+Part B- Contains Automation
+Part C- Contains Strategy and recommendations
+
+Futher ahead in this readme file, it will ellboarate about the Part B- Automation
+
 # Sports Betting QA Automation
 
-Selenium + Pytest (UI) and `requests` (API) automation for the *Single Bet Placement* feature of
+Selenium + Pytest (UI) and `requests` (API) automation for the _Single Bet Placement_ feature of
 https://qae-assignment-tau.vercel.app.
 
 ## Requirements
@@ -60,13 +67,13 @@ $env:HEADLESS = "true"
 
 All settings live in [config/settings.py](config/settings.py) and can be overridden by environment variables:
 
-| Variable | Default | Purpose |
-|---|---|---|
-| `BASE_URL` | `https://qae-assignment-tau.vercel.app` | Application under test |
-| `USER_ID` | `candidate-tynWiuDmY7AR` | Sent as `x-user-id` (API) and `?user-id=` (UI). The backend rejects ids that are not in its expected format |
-| `HEADLESS` | `false` | Set to `true` to run Chrome without a visible window |
-| `UI_TIMEOUT` | `10` | Seconds for explicit Selenium waits |
-| `API_TIMEOUT` | `10` | Seconds per HTTP request |
+| Variable      | Default                                 | Purpose                                                                                                     |
+| ------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `BASE_URL`    | `https://qae-assignment-tau.vercel.app` | Application under test                                                                                      |
+| `USER_ID`     | `candidate-tynWiuDmY7AR`                | Sent as `x-user-id` (API) and `?user-id=` (UI). The backend rejects ids that are not in its expected format |
+| `HEADLESS`    | `false`                                 | Set to `true` to run Chrome without a visible window                                                        |
+| `UI_TIMEOUT`  | `10`                                    | Seconds for explicit Selenium waits                                                                         |
+| `API_TIMEOUT` | `10`                                    | Seconds per HTTP request                                                                                    |
 
 On a UI failure a screenshot is saved to `reports/screenshots/` and also attached to the reports.
 
@@ -74,9 +81,9 @@ On a UI failure a screenshot is saved to `reports/screenshots/` and also attache
 
 Every run writes two reports automatically (configured in `pytest.ini`):
 
-| Report | Location | Notes |
-|---|---|---|
-| pytest-html | `reports/report.html` | Single self-contained file, open in any browser |
+| Report         | Location                  | Notes                                                   |
+| -------------- | ------------------------- | ------------------------------------------------------- |
+| pytest-html    | `reports/report.html`     | Single self-contained file, open in any browser         |
 | Allure results | `reports/allure-results/` | Raw data for the Allure dashboard (cleared on each run) |
 
 Allure shows tests grouped by layer (UI / API), API steps with request and response bodies, and UI failures with a
@@ -132,9 +139,9 @@ PART-B-Automation/
 
 ## Tests and why they were chosen
 
-| Test | Why |
-|---|---|
-| `tests/ui/test_place_bet_e2e.py` | Critical journey: select odds, enter stake, place bet, check the receipt, the backend deduction and the cleared slip. Money moves here, so slip, receipt and backend must agree. |
+| Test                                     | Why                                                                                                                                                                                                         |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/ui/test_place_bet_e2e.py`         | Critical journey: select odds, enter stake, place bet, check the receipt, the backend deduction and the cleared slip. Money moves here, so slip, receipt and backend must agree.                            |
 | `tests/api/test_place_bet_validation.py` | Business rule: stake limits and format are enforced by the API (parametrized: 0, 0.99, -5, 100.01, 3 decimals, non-numeric), and a rejected bet never changes the balance. A UI-only check can be bypassed. |
 
 ## Expected results on the current build
@@ -142,12 +149,12 @@ PART-B-Automation/
 The tests assert the **specified** behaviour, so they fail where the application has known defects (details in
 `Bug_Reports.md`). That is the intended outcome, not a framework problem:
 
-| Failing check | Bug |
-|---|---|
+| Failing check                                                                  | Bug    |
+| ------------------------------------------------------------------------------ | ------ |
 | API test, `negative` case: a stake of `-5` returns 200 and credits the balance | BUG-01 |
-| UI test: receipt potential payout is `stake x 2` instead of `stake x odds` | BUG-03 |
-| UI test: displayed balance is not updated after the bet | BUG-05 |
-| UI test: receipt shows home and away teams swapped | BUG-07 |
+| UI test: receipt potential payout is `stake x 2` instead of `stake x odds`     | BUG-03 |
+| UI test: displayed balance is not updated after the bet                        | BUG-05 |
+| UI test: receipt shows home and away teams swapped                             | BUG-07 |
 
 The other five API cases pass. Once the defects are fixed, the same tests pass without any change.
 
